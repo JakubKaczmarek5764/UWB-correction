@@ -63,7 +63,7 @@ def euclidean_distance(p1, p2):
 
 errors_wo_correction = [euclidean_distance(Y_test.iloc[i], X_test.iloc[i]) for i in range(len(Y_test))]
 errors_wo_correction.sort()
-cumulative_probabilities1 = np.arange(1, len(errors_wo_correction) + 1) / len(errors_wo_correction)
+cumulative_probabilities_wo_correction = np.arange(1, len(errors_wo_correction) + 1) / len(errors_wo_correction)
 
 errors1 = [euclidean_distance(Y_test.iloc[i], predictions1.iloc[i]) for i in range(len(predictions1))]
 errors1.sort()
@@ -78,6 +78,7 @@ errors3.sort()
 cumulative_probabilities3 = np.arange(1, len(errors3) + 1) / len(errors3)
 
 # Plot the CDF
+plt.plot(errors_wo_correction, cumulative_probabilities_wo_correction, marker='', linestyle='-')
 plt.plot(errors1, cumulative_probabilities1, marker='', linestyle='-')
 plt.plot(errors2, cumulative_probabilities2, marker='', linestyle='-')
 plt.plot(errors3, cumulative_probabilities3, marker='', linestyle='-')
