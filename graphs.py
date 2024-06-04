@@ -65,6 +65,10 @@ plt.show()
 def euclidean_distance(p1, p2):
     return math.sqrt((p1.iloc[0] - p2.iloc[0]) ** 2 + (p1.iloc[1] - p2.iloc[1]) ** 2)
 
+errors_wo_correction = [euclidean_distance(Y_test.iloc[i], X_test.iloc[i]) for i in range(len(Y_test))]
+errors_wo_correction.sort()
+cumulative_probabilities_wo_correction = np.arange(1, len(errors_wo_correction) + 1) / len(errors_wo_correction)
+
 errors1 = [euclidean_distance(Y_test.iloc[i], predictions1.iloc[i]) for i in range(len(predictions1))]
 errors1.sort()
 cumulative_probabilities1 = np.arange(1, len(errors1) + 1) / len(errors1)
@@ -78,10 +82,10 @@ errors3.sort()
 cumulative_probabilities3 = np.arange(1, len(errors3) + 1) / len(errors3)
 
 # Plot the CDF
-plt.plot(errors_wo_correction, cumulative_probabilities_wo_correction, marker='', linestyle='-')
-plt.plot(errors1, cumulative_probabilities1, marker='', linestyle='-')
-plt.plot(errors2, cumulative_probabilities2, marker='', linestyle='-')
-plt.plot(errors3, cumulative_probabilities3, marker='', linestyle='-')
+plt.plot(errors_wo_correction, cumulative_probabilities_wo_correction, marker='', linestyle='-', label="Wyniki pomiarów dynamicznych")
+plt.plot(errors1, cumulative_probabilities1, marker='', linestyle='-', label="Sieć o 1 warstwie ukrytej")
+plt.plot(errors2, cumulative_probabilities2, marker='', linestyle='-', label="Sieć o 2 warstwach ukrytych")
+plt.plot(errors3, cumulative_probabilities3, marker='', linestyle='-', label="Sieć o 3 warstwach ukrytych")
 plt.xlabel('Error')
 plt.ylabel('Cumulative Frequency')
 plt.title('CDF of Prediction Errors')
@@ -90,9 +94,9 @@ plt.grid(True)
 plt.show()
 
 
-plt.scatter(x=X_test[['measured_x']], y=X_test[['measured_y']], s=10)
-plt.scatter(x=predictions2[['predicted_x']], y=predictions2[['predicted_y']], s=10)
-plt.scatter(x=Y_test[['expected_x']], y=Y_test[['expected_y']], s=10)
+plt.scatter(x=X_test[['measured_x']], y=X_test[['measured_y']], s=10, label="Pomiary dynamiczne")
+plt.scatter(x=predictions2[['predicted_x']], y=predictions2[['predicted_y']], s=10, label="Skorygowane")
+plt.scatter(x=Y_test[['expected_x']], y=Y_test[['expected_y']], s=10, label="Rzeczywiste")
 plt.legend(loc="best")
 plt.yticks(np.linspace(0, 3000, num=4))
 plt.show()
