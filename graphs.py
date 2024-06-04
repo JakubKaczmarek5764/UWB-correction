@@ -36,25 +36,29 @@ predictions1 = pd.read_csv('predictions1.csv')
 predictions2 = pd.read_csv('predictions2.csv')
 predictions3 = pd.read_csv('predictions3.csv')
 
-plt.plot(range(1, len(mse_train_values1) + 1), mse_train_values1, marker='')
+plt.plot(range(1, len(mse_train_values1) + 1), mse_train_values1, marker='', label="Sieć o 1 warstwie ukrytej")
 
-plt.plot(range(1, len(mse_train_values2) + 1), mse_train_values2, marker='')
+plt.plot(range(1, len(mse_train_values2) + 1), mse_train_values2, marker='', label="Sieć o 2 warstwach ukrytych")
 
-plt.plot(range(1, len(mse_train_values3) + 1), mse_train_values3, marker='')
+plt.plot(range(1, len(mse_train_values3) + 1), mse_train_values3, marker='', label="Sieć o 3 warstwach ukrytych")
 plt.xlabel('Epoch')
 plt.ylabel('Mean Squared Error')
 plt.title('MSE Over Epochs Train')
+plt.ylim(0.015, 0.045)
+plt.legend(loc="best")
 plt.grid(True)
 plt.show()
 
 
-plt.plot(range(1, len(mse_test_values1) + 1), mse_test_values1, marker='')
-plt.plot(range(1, len(mse_test_values2) + 1), mse_test_values2, marker='')
-plt.plot(range(1, len(mse_test_values3) + 1), mse_test_values3, marker='')
-plt.plot([1, len(mse_test_values1) + 1], [mse_wo_correction, mse_wo_correction])
+plt.plot(range(1, len(mse_test_values1) + 1), mse_test_values1, marker='', label="Sieć o 1 warstwie ukrytej")
+plt.plot(range(1, len(mse_test_values2) + 1), mse_test_values2, marker='', label="Sieć o 2 warstwach ukrytych")
+plt.plot(range(1, len(mse_test_values3) + 1), mse_test_values3, marker='', label="Sieć o 3 warstwach ukrytych")
+plt.plot([1, len(mse_test_values2) + 1], [mse_wo_correction, mse_wo_correction])
 plt.xlabel('Epoch')
 plt.ylabel('Mean Squared Error')
 plt.title('MSE Over Epochs Test')
+plt.ylim(0.015, 0.045)
+plt.legend(loc="best")
 plt.grid(True)
 plt.show()
 
@@ -74,19 +78,23 @@ errors3.sort()
 cumulative_probabilities3 = np.arange(1, len(errors3) + 1) / len(errors3)
 
 # Plot the CDF
-plt.plot(errors1, cumulative_probabilities1, marker='', linestyle='-')
-plt.plot(errors2, cumulative_probabilities2, marker='', linestyle='-')
-plt.plot(errors3, cumulative_probabilities3, marker='', linestyle='-')
+plt.plot(errors1, cumulative_probabilities1, marker='', linestyle='-', label="Sieć o 1 warstwie ukrytej")
+plt.plot(errors2, cumulative_probabilities2, marker='', linestyle='-', label="Sieć o 2 warstwach ukrytych")
+plt.plot(errors3, cumulative_probabilities3, marker='', linestyle='-', label="Sieć o 3 warstwach ukrytych")
+
+#jeszcze jeden tutaj
+
 plt.xlabel('Error')
 plt.ylabel('Cumulative Frequency')
 plt.title('CDF of Prediction Errors')
+plt.legend(loc="best")
 plt.grid(True)
 plt.show()
 
 
-plt.scatter(x=X_test[['measured_x']], y=X_test[['measured_y']], s=10)
-plt.scatter(x=predictions1[['predicted_x']], y=predictions1[['predicted_y']], s=10)
-plt.scatter(x=Y_test[['expected_x']], y=Y_test[['expected_y']], s=10)
-
+plt.scatter(x=X_test[['measured_x']], y=X_test[['measured_y']], s=10, label="Pomiary dynamiczne")
+plt.scatter(x=predictions1[['predicted_x']], y=predictions1[['predicted_y']], s=10, label="Skorygowane")
+plt.scatter(x=Y_test[['expected_x']], y=Y_test[['expected_y']], s=10, label="Rzeczywiste")
+plt.legend(loc="best")
 plt.yticks(np.linspace(0, 3000, num=4))
 plt.show()
