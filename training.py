@@ -10,32 +10,41 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 import input_data
 
-one_layer = {
+params = {
     'activation_function': ('relu',),
     'optimizer': 'Adam',
     'num_of_layers': 1,
     'num_of_neurons': (32,),
-    'learning_rate': 0.001,
     'batch_size': 64,
-    'epochs': 100
+    'epochs': 100,
+    'patience': 10
 }
-two_layers = {
-    'activation_function': ('relu', 'relu'),
-    'optimizer': 'Adam', 'num_of_layers': 2,
-    'num_of_neurons': (4, 8),
-    'learning_rate': 0.001,
-    'batch_size': 64,
-    'epochs': 100
-}
-three_layers = {
-    'activation_function': ('relu', 'tanh', 'tanh'),
-    'optimizer': 'Adam',
-    'num_of_layers': 3,
-    'num_of_neurons': (4, 4, 32),
-    'learning_rate': 0.001,
-    'batch_size': 64,
-    'epochs': 100
-}
+# one_layer = {
+#     'activation_function': ('relu',),
+#     'optimizer': 'Adam',
+#     'num_of_layers': 1,
+#     'num_of_neurons': (32,),
+#     'learning_rate': 0.001,
+#     'batch_size': 64,
+#     'epochs': 100
+# }
+# two_layers = {
+#     'activation_function': ('relu', 'relu'),
+#     'optimizer': 'Adam', 'num_of_layers': 2,
+#     'num_of_neurons': (4, 8),
+#     'learning_rate': 0.001,
+#     'batch_size': 64,
+#     'epochs': 100
+# }
+# three_layers = {
+#     'activation_function': ('relu', 'tanh', 'tanh'),
+#     'optimizer': 'Adam',
+#     'num_of_layers': 3,
+#     'num_of_neurons': (4, 4, 32),
+#     'learning_rate': 0.001,
+#     'batch_size': 64,
+#     'epochs': 100
+# }
 
 training_data = input_data.load__training_data()
 test_data = input_data.load_test_data()
@@ -72,19 +81,18 @@ f.write(str(mse_wo_correction))
 #definiowanie modelu
 model = Sequential()
 model.add(Dense(2, input_dim=2))
-model.add(Dense(16, activation="relu"))
-model.add(Dense(32, activation="relu"))
-model.add(Dense(16, activation="relu"))
+for i in range(params['num_of_layers']):
+    model.add(Dense(params['num_of_neurons'][i], params['activation_function'][i]))
 model.add(Dense(2, activation="linear"))
 
 model.compile(optimizer='adam', loss="mse")
 
-early_stopping = EarlyStopping(monitor='loss', patience=10, restore_best_weights=True)
-history = model.fit(X_train, Y_train, epochs=100, batch_size=512, callbacks=[early_stopping],validation_data=(X_test, Y_test),verbose=1)
+early_stopping = EarlyStopping(monitor='loss', patience=params['patience'], restore_best_weights=True)
+history = model.fit(X_train, Y_train, epochs=params['epochs'], batch_size=params['batch_size'], callbacks=[early_stopping],validation_data=(X_test, Y_test),verbose=1)
 
 history_df = pd.DataFrame(history.history)
 history_df.columns = ['training_mse', 'test_mse']
-history_df.to_csv('history.csv', index=False)
+history_df.to_csv('history3.csv', index=False)
 
 loss = model.evaluate(X_test, Y_test)
 
@@ -102,7 +110,7 @@ predictions = Y_scaler.inverse_transform(predictions)
 pred_df = pd.DataFrame(predictions)
 
 pred_df.columns=['predicted_x', 'predicted_y']
-pred_df.to_csv('predictions.csv', index=False)
+pred_df.to_csv('predictions3.csv', index=False)
 
 
 

@@ -18,14 +18,29 @@ Y_test = test_data[['expected_x', 'expected_y']]
 mse_wo_correction = float(open('mse_wo_correction.txt').readline())
 
 # tu beda 3 serie danych dla 1, 2, 3 sieci ukrytych
-mse_df = pd.read_csv('history.csv')
-mse_train_values = mse_df['training_mse']
-mse_test_values = mse_df['test_mse']
+mse_df1 = pd.read_csv('history1.csv')
+mse_train_values1 = mse_df1['training_mse']
+mse_test_values1 = mse_df1['test_mse']
+
+
+mse_df2 = pd.read_csv('history2.csv')
+mse_train_values2 = mse_df2['training_mse']
+mse_test_values2 = mse_df2['test_mse']
+
+mse_df3 = pd.read_csv('history3.csv')
+mse_train_values3 = mse_df3['training_mse']
+mse_test_values3 = mse_df3['test_mse']
 
 # tu beda 3 serie danych dla 1, 2, 3 sieci ukrytych
-predictions = pd.read_csv('predictions.csv')
+predictions1 = pd.read_csv('predictions1.csv')
+predictions2 = pd.read_csv('predictions2.csv')
+predictions3 = pd.read_csv('predictions3.csv')
 
-plt.plot(range(1, len(mse_train_values) + 1), mse_train_values, marker='')
+plt.plot(range(1, len(mse_train_values1) + 1), mse_train_values1, marker='')
+
+plt.plot(range(1, len(mse_train_values2) + 1), mse_train_values2, marker='')
+
+plt.plot(range(1, len(mse_train_values3) + 1), mse_train_values3, marker='')
 plt.xlabel('Epoch')
 plt.ylabel('Mean Squared Error')
 plt.title('MSE Over Epochs Train')
@@ -33,8 +48,10 @@ plt.grid(True)
 plt.show()
 
 
-plt.plot(range(1, len(mse_test_values) + 1), mse_test_values, marker='')
-plt.plot([1, len(mse_test_values) + 1], [mse_wo_correction, mse_wo_correction])
+plt.plot(range(1, len(mse_test_values1) + 1), mse_test_values1, marker='')
+plt.plot(range(1, len(mse_test_values2) + 1), mse_test_values2, marker='')
+plt.plot(range(1, len(mse_test_values3) + 1), mse_test_values3, marker='')
+plt.plot([1, len(mse_test_values1) + 1], [mse_wo_correction, mse_wo_correction])
 plt.xlabel('Epoch')
 plt.ylabel('Mean Squared Error')
 plt.title('MSE Over Epochs Test')
@@ -44,13 +61,22 @@ plt.show()
 def euclidean_distance(p1, p2):
     return math.sqrt((p1.iloc[0] - p2.iloc[0]) ** 2 + (p1.iloc[1] - p2.iloc[1]) ** 2)
 
-errors = [euclidean_distance(Y_test.iloc[i], predictions.iloc[i]) for i in range(len(predictions))]
-errors.sort()
-cumulative_probabilities = np.arange(1, len(errors) + 1) / len(errors)
+errors1 = [euclidean_distance(Y_test.iloc[i], predictions1.iloc[i]) for i in range(len(predictions1))]
+errors1.sort()
+cumulative_probabilities1 = np.arange(1, len(errors1) + 1) / len(errors1)
 
+errors2 = [euclidean_distance(Y_test.iloc[i], predictions2.iloc[i]) for i in range(len(predictions2))]
+errors2.sort()
+cumulative_probabilities2 = np.arange(1, len(errors2) + 1) / len(errors2)
+
+errors3 = [euclidean_distance(Y_test.iloc[i], predictions3.iloc[i]) for i in range(len(predictions3))]
+errors3.sort()
+cumulative_probabilities3 = np.arange(1, len(errors3) + 1) / len(errors3)
 
 # Plot the CDF
-plt.plot(errors, cumulative_probabilities, marker='', linestyle='-')
+plt.plot(errors1, cumulative_probabilities1, marker='', linestyle='-')
+plt.plot(errors2, cumulative_probabilities2, marker='', linestyle='-')
+plt.plot(errors3, cumulative_probabilities3, marker='', linestyle='-')
 plt.xlabel('Error')
 plt.ylabel('Cumulative Frequency')
 plt.title('CDF of Prediction Errors')
@@ -59,7 +85,7 @@ plt.show()
 
 
 plt.scatter(x=X_test[['measured_x']], y=X_test[['measured_y']], s=10)
-plt.scatter(x=predictions[['predicted_x']], y=predictions[['predicted_y']], s=10)
+plt.scatter(x=predictions1[['predicted_x']], y=predictions1[['predicted_y']], s=10)
 plt.scatter(x=Y_test[['expected_x']], y=Y_test[['expected_y']], s=10)
 
 plt.yticks(np.linspace(0, 3000, num=4))
