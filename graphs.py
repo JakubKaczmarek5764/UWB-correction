@@ -61,6 +61,10 @@ plt.show()
 def euclidean_distance(p1, p2):
     return math.sqrt((p1.iloc[0] - p2.iloc[0]) ** 2 + (p1.iloc[1] - p2.iloc[1]) ** 2)
 
+errors_wo_correction = [euclidean_distance(Y_test.iloc[i], X_test.iloc[i]) for i in range(len(Y_test))]
+errors_wo_correction.sort()
+cumulative_probabilities1 = np.arange(1, len(errors_wo_correction) + 1) / len(errors_wo_correction)
+
 errors1 = [euclidean_distance(Y_test.iloc[i], predictions1.iloc[i]) for i in range(len(predictions1))]
 errors1.sort()
 cumulative_probabilities1 = np.arange(1, len(errors1) + 1) / len(errors1)
@@ -85,7 +89,7 @@ plt.show()
 
 
 plt.scatter(x=X_test[['measured_x']], y=X_test[['measured_y']], s=10)
-plt.scatter(x=predictions1[['predicted_x']], y=predictions1[['predicted_y']], s=10)
+plt.scatter(x=predictions2[['predicted_x']], y=predictions2[['predicted_y']], s=10)
 plt.scatter(x=Y_test[['expected_x']], y=Y_test[['expected_y']], s=10)
 
 plt.yticks(np.linspace(0, 3000, num=4))
