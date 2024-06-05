@@ -16,11 +16,7 @@ def load_test_data():
     f8_test_files = glob.glob('f8/dyn/*.csv')
     f8_dfs = [pd.read_csv(file, header=None) for file in f8_test_files]
     f10_test_files = glob.glob('f10/dyn/*.csv')
-
-
     f10_dfs = [pd.read_csv(file, header=None) for file in f10_test_files]
-
-
     combined_df = pd.concat(f8_dfs + f10_dfs, ignore_index=True)
     combined_df.columns = ['measured_x', 'measured_y', 'expected_x', 'expected_y']
     return combined_df
